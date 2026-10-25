@@ -1,0 +1,36 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "App user profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Avatar": {
+      "title": "Avatar",
+      "description": "User generated avatar data",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "modelUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "modelUrl", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{userId}/avatars/{avatarId}": {
+      "schema": "Avatar",
+      "description": "User's generated avatars"
+    }
+  }
+}

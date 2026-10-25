@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId);
+      
+      match /avatars/{avatarId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(avatarId);
+        allow update, delete: if isOwner(userId);
+      }
+    }
+  }
+}
